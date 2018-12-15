@@ -1,9 +1,21 @@
 #include <stdio.h>
 #include <string.h>
+#include <pthread.h>
 #include "my_lib.h"
 
 static struct my_stack *stack;
 static struct my_stack_node *data;
+
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+
+/* Funciones asociadas a la libreria pthread
+
+    pthread_mutex_lock()    --> Bloqueamos el semáforo mutex pasandole como parámetro su dirección
+    pthread_mutex_unlock()  --> Desbloqueamos el semáforo mutex pasandole como parámetro su dirección
+    pthread_exit()          --> Salimos de la función
+    pthread_join()          --> Espera a que los hilos acabaen
+
+*/
 
 int main(int argc, char *argv[]) {
 
@@ -32,7 +44,7 @@ int main(int argc, char *argv[]) {
 
     if (stack != NULL) {    // Si el fichero existe, leemos la pila
         printf("Fichero %s encontrado!)\n",nom_stack);
-        
+
         if (my_stack_len(stack) < debug_num_elems) {     // Si la pila leida contiene menos de num_elems elementos, añadimos los restantes
             printf("DEBUG - Hay menos de %d elementos en la pila! (stack length: %d)\n",debug_num_elems,my_stack_len(stack));
 
@@ -40,7 +52,7 @@ int main(int argc, char *argv[]) {
             int num_elems_read = my_stack_len(stack);                       // Nùmero de elementos en la pila leida
 
             for (int i=0; i<num_elems_read; i++) {
-                printf("DEBUG - Copying data... (Remaining: %d)\n",my_stack_len(stack)); 
+                printf("DEBUG - Copying data... (Remaining: %d)\n",my_stack_len(stack));
                 struct my_stack_node *aux_data = my_stack_pop(stack);
                 my_stack_push(aux_stack, aux_data);                 // Copiamos los contenidos de la pila en la auxiliaria
             }
@@ -54,7 +66,7 @@ int main(int argc, char *argv[]) {
             stack = my_stack_read(nom_stack);       // Leemos la pila auxiliaria
         }
     }
-        
+
     else {                                  // Si el fichero no existe, llenamos la pila de (num_elems) elementos y la escribimos
         printf("Fichero \"%s\" no encontrado! Creando...\n", nom_stack);
         stack = my_stack_init(num_elems);
@@ -63,7 +75,7 @@ int main(int argc, char *argv[]) {
             my_stack_push(stack,data);
         }
 
-        my_stack_write(stack,nom_stack);    
+        my_stack_write(stack,nom_stack);
     }
 
     // Comprobaciòn final: Leemos el fichero desde el disco y vemos cuàntos elementos contiene
@@ -71,6 +83,6 @@ int main(int argc, char *argv[]) {
     printf("DEBUG - Stack length: %d\n",my_stack_len(stack));
 
     return 0;
-    
-	
+
+
 }
