@@ -3,9 +3,12 @@
 #include <pthread.h>
 #include "my_lib.h"
 
+void funcion_hilo();
+
 static struct my_stack *stack;
 static struct my_stack_node *data;
 
+pthread_t hilos[10];
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 /* Funciones asociadas a la libreria pthread
@@ -82,7 +85,22 @@ int main(int argc, char *argv[]) {
     stack = my_stack_read(nom_stack);
     printf("DEBUG - Stack length: %d\n",my_stack_len(stack));
 
+
+
+    for (int i=0; i<10; i++) {
+      pthread_create(hilos[i], NULL, funcion_hilo, NULL);
+    }
+
+
+
+
     return 0;
 
+
+}
+
+void funcion_hilo() {
+
+  printf("Test hilo\n");
 
 }

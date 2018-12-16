@@ -4,8 +4,7 @@
 
 int main(int argc, char *argv[]) {
 
-	FILE *file;
-	struct my_stack *stack = my_stack_read(file);
+	struct my_stack *stack = my_stack_read(argv[1]);
 	int contador = 0;
 	int suma = 0;
 	int min = 0;
@@ -16,6 +15,7 @@ int main(int argc, char *argv[]) {
 		contador++;
 		int value = my_stack_pop(stack);
 		printf("Elemento número %d --> %d\n", contador, value);
+
 		//TODO suma
 		//TODO min
 		//TODO max
