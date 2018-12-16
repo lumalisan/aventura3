@@ -5,7 +5,7 @@
 int main(int argc, char *argv[]) {
 
 	FILE *file;
-	my_stack *stack = my_stack_read(file);
+	struct my_stack *stack = my_stack_read(file);
 	int contador = 0;
 	int suma = 0;
 	int min = 0;
