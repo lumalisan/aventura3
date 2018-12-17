@@ -104,6 +104,13 @@ int main(int argc, char *argv[]) {
     }
     //printf("Creados 10 threads, en teoría\n");
 
+    for (int i=0; i<THREADS; i++) {
+        pthread_join(hilos[i],NULL);
+    }
+
+    my_stack_write(stack,argv[1]);
+    
+
     return 0;
 
 }
@@ -114,7 +121,7 @@ void *funcion_hilo() {
   printf("Starting thread\n");
 
   int counter = 0;
-  while (counter != N){
+  while (counter != N) {
     counter++;
     struct my_data *data_int;
     data_int = malloc(sizeof(struct my_data));
@@ -123,6 +130,7 @@ void *funcion_hilo() {
     pthread_mutex_unlock(&mutex);
     int value = data_int->value;
     value++;
+    //printf("DEBUG Value: %d\n",value);
     data_int->value = value;
     pthread_mutex_lock(&mutex);
     my_stack_push(stack, data_int);
