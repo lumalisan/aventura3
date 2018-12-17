@@ -4,7 +4,13 @@
 
 int main(int argc, char *argv[]) {
 
+	if (strlen(argv[1] == 0)) {
+		printf("Error: Ningún fichero especificado - Uso: ./reader <nombre_file>");
+		exit(1);
+	}
+
 	struct my_stack *stack = my_stack_read(argv[1]);
+
 	int contador = 0;
 	int suma = 0;
 	int min = 0;
