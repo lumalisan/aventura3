@@ -111,12 +111,11 @@ int main(int argc, char *argv[]) {
 
     my_stack_write(stack,argv[1]);
 
-    my_stack_purge(stack);
-
     for (int i=0; i<THREADS; i++) {
         pthread_exit(&hilos[i]);
     }
 
+    my_stack_purge(stack);
 
     return 0;
 
