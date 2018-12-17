@@ -95,6 +95,15 @@ int main(int argc, char *argv[]) {
     printf("DEBUG - Stack length: %d\n",my_stack_len(stack));
 */
 
+    for (int i=0; i<10; i++) {
+        struct my_stack *debug_stack = my_stack_read(argv[1]);
+        struct my_data *debug_data = malloc(sizeof(struct my_data));
+        debug_data = my_stack_pop(debug_stack);
+        int debug_value = debug_data->value;
+        printf("DEBUG Elemento pila n.%d: %d\n",i,debug_value);
+    }
+    
+
   printf("Threads: %d. Iterations: %d\n", THREADS, N);
     while (num != THREADS) {
       pthread_create(&hilos[num], NULL, funcion_hilo, NULL);
