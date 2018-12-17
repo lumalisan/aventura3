@@ -4,7 +4,7 @@
 #include "my_lib.h"
 
 #define THREADS 10
-#define N 10000000
+#define N 1000000
 
 void *funcion_hilo();
 
