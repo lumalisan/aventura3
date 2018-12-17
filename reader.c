@@ -6,14 +6,14 @@
 int main(int argc, char *argv[]) {
 
 	if (strlen(argv[1]) == 0) {
-		printf("USAGE: ./reader <filename>");
+		printf("USAGE: ./reader <filename>\n");
 		exit(1);
 	}
 
 	struct my_stack *stack = my_stack_read(argv[1]);
 
 	if (stack == NULL) {
-		printf("Couldn't open stack file %s", argv[1]);
+		printf("Couldn't open stack file %s\n", argv[1]);
 		exit(1);
 	}
 

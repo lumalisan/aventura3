@@ -4,12 +4,12 @@
 #include "my_lib.h"
 
 #define THREADS 10
-#define N 1000000
+#define N 10000000
 
 void *funcion_hilo();
 
 static struct my_stack *stack;
-static struct my_stack_node *data;
+//static struct my_stack_node *data;
 static int num = 0;
 
 pthread_t hilos[THREADS];
@@ -24,10 +24,14 @@ pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 */
 
+struct my_data {
+  int value;
+};
+
 int main(int argc, char *argv[]) {
 
   if (strlen(argv[1]) == 0) {
-    printf("USAGE: ./av3 <filename>");
+    printf("USAGE: ./av3 <filename>\n");
     exit(1);
   }
 
@@ -43,8 +47,11 @@ int main(int argc, char *argv[]) {
   si efectivamente se añadìan los elementos que faltaban
 */
 
-  data = malloc(sizeof(struct my_stack_node));    // Reservamos memòria para un nodo
-  data->data = 0;                                 // Valor del nodo: 0
+  struct my_data *data_int;
+  data_int = malloc(sizeof(struct my_data));
+  data_int->value = 0;
+  //data = malloc(sizeof(struct my_data));    // Reservamos memòria para un nodo
+  //data->data = 0;                               // Valor del nodo: 0
 
     if (stack != NULL) {    // Si el fichero existe, leemos la pila
         printf("Fichero %s encontrado!)\n",argv[1]);
@@ -63,7 +70,7 @@ int main(int argc, char *argv[]) {
             }
 
             while (my_stack_len(aux_stack) != debug_num_elems) {    // Añadimos los elementos que faltan
-                my_stack_push(aux_stack,data);
+                my_stack_push(aux_stack,data_int);
                 printf("DEBUG - Adding 1 element... | ");
                 printf("Current stack length: %d\n",my_stack_len(aux_stack));
             }
@@ -76,7 +83,7 @@ int main(int argc, char *argv[]) {
         stack = my_stack_init(num_elems);
 
         for (int i=0; i<num_elems; i++) {
-            my_stack_push(stack,data);
+            my_stack_push(stack,data_int);
         }
 
         my_stack_write(stack,argv[1]);
@@ -107,14 +114,16 @@ void *funcion_hilo() {
   int counter = 0;
   while (counter != N){
     counter++;
+    struct my_data *data_int;
+    data_int = malloc(sizeof(struct my_data));
     pthread_mutex_lock(&mutex);
-    struct my_stack_node *aux_data = my_stack_pop(stack);
+    data_int = my_stack_pop(stack);
     pthread_mutex_unlock(&mutex);
-    int value = (int) aux_data;
+    int value = data_int->value;
     value++;
-    aux_data->data = value;
+    data_int->value = value;
     pthread_mutex_lock(&mutex);
-    my_stack_push(stack, aux_data);
+    my_stack_push(stack, data_int);
     pthread_mutex_unlock(&mutex);
   }
 
