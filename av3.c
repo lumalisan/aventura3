@@ -3,10 +3,12 @@
 #include <pthread.h>
 #include "my_lib.h"
 
-void funcion_hilo();
+void *funcion_hilo();
 
 static struct my_stack *stack;
 static struct my_stack_node *data;
+static int num = 0;
+
 
 pthread_t hilos[10];
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -22,8 +24,8 @@ pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 int main(int argc, char *argv[]) {
 
-  if (strlen(argv[1] == 0)) {
-    printf("Error: Ningún fichero especificado - Uso: ./av3 <nombre_file>");
+  if (strlen(argv[1]) == 0) {
+    printf("USAGE: ./av3 <filename>");
     exit(1);
   }
 
@@ -84,17 +86,20 @@ int main(int argc, char *argv[]) {
     printf("DEBUG - Stack length: %d\n",my_stack_len(stack));
 */
 
-    for (int i=0; i<10; i++) {
-      pthread_create(hilos[i], NULL, funcion_hilo, NULL);
+    while (num != 10) {
+      pthread_create(&hilos[num], NULL, funcion_hilo, NULL);
     }
+    printf("Creados 10 threads, en teoría\n");
 
     return 0;
 
 }
 
-void funcion_hilo() {
+void *funcion_hilo() {
   // My boobs are veganas, fiol is fucking bitch lasagna bitch lasagna
 
-  printf("Test hilo\n");
+  printf("Test hilo (num = %d)\n",num);
+  num++;
+  return 0;
 
 }
