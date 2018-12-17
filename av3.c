@@ -89,12 +89,6 @@ int main(int argc, char *argv[]) {
         my_stack_write(stack,argv[1]);
     }
 
-/*
-    // Comprobaciòn final: Leemos el fichero desde el disco y vemos cuàntos elementos contiene
-    stack = my_stack_read(argv[1]);
-    printf("DEBUG - Stack length: %d\n",my_stack_len(stack));
-*/
-
     for (int i=0; i<10; i++) {
         struct my_stack *debug_stack = my_stack_read(argv[1]);
         struct my_data *debug_data = malloc(sizeof(struct my_data));
@@ -102,7 +96,6 @@ int main(int argc, char *argv[]) {
         int debug_value = debug_data->value;
         printf("DEBUG Elemento pila n.%d: %d\n",i,debug_value);
     }
-    
 
   printf("Threads: %d. Iterations: %d\n", THREADS, N);
     while (num != THREADS) {
