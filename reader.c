@@ -3,6 +3,10 @@
 #include <limits.h>
 #include "my_lib.h"
 
+struct my_data {
+  int value;
+};
+
 int main(int argc, char *argv[]) {
 
 	if (strlen(argv[1]) == 0) {
@@ -22,21 +26,27 @@ int main(int argc, char *argv[]) {
 	int min = INT_MAX;
 	int max = 0;
 
-	while (contador <= my_stack_len(stack)) {
+	struct my_data *data_int;
+	data_int = malloc(sizeof(struct my_data));
+
+	int stack_length = my_stack_len(stack);
+
+	while (contador < stack_length) {
 		contador++;
-		int value = (int) my_stack_pop(stack);
-		printf("Elemento número %d --> %d\n", contador, value);
+
+		data_int = my_stack_pop(stack);
+		printf("Elemento número %d --> %d\n", contador, data_int->value);
 		//Suma
-		suma += value;
+		suma += data_int->value;
 		//Min
-		if (value < min) {
-			min = value;
+		if (data_int->value < min) {
+			min = data_int->value;
 		}
 		//Max
 		if (contador == 1) {
-			max = value;
-		} else if (value > max) {
-			max = value;
+			max = data_int->value;
+		} else if (data_int->value > max) {
+			max = data_int->value;
 		}
 	}
 
