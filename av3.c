@@ -3,14 +3,16 @@
 #include <pthread.h>
 #include "my_lib.h"
 
+#define THREADS 10
+#define N 1000000
+
 void *funcion_hilo();
 
 static struct my_stack *stack;
 static struct my_stack_node *data;
 static int num = 0;
 
-
-pthread_t hilos[10];
+pthread_t hilos[THREADS];
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 /* Funciones asociadas a la libreria pthread
@@ -32,7 +34,7 @@ int main(int argc, char *argv[]) {
   stack = my_stack_read(argv[1]);
 
   int num_elems = 10;
-  int debug_num_elems = 15;
+  int debug_num_elems = 10;
 
 /*
   Mayor nùmero para verificar si se añaden los elementos que faltan.
@@ -86,10 +88,12 @@ int main(int argc, char *argv[]) {
     printf("DEBUG - Stack length: %d\n",my_stack_len(stack));
 */
 
-    while (num != 10) {
+  printf("Threads: %d. Iterations: %d\n", THREADS, N);
+    while (num != THREADS) {
       pthread_create(&hilos[num], NULL, funcion_hilo, NULL);
+      num++;
     }
-    printf("Creados 10 threads, en teoría\n");
+    //printf("Creados 10 threads, en teoría\n");
 
     return 0;
 
@@ -98,8 +102,24 @@ int main(int argc, char *argv[]) {
 void *funcion_hilo() {
   // My boobs are veganas, fiol is fucking bitch lasagna bitch lasagna
 
-  printf("Test hilo (num = %d)\n",num);
-  num++;
+  printf("Starting thread\n");
+
+  int counter = 0;
+  while (counter != N){
+    counter++;
+    pthread_mutex_lock(&mutex);
+    struct my_stack_node *aux_data = my_stack_pop(stack);
+    pthread_mutex_unlock(&mutex);
+    int value = (int) aux_data;
+    value++;
+    aux_data->data = value;
+    pthread_mutex_lock(&mutex);
+    my_stack_push(stack, aux_data);
+    pthread_mutex_unlock(&mutex);
+  }
+
+  pthread_exit(&hilos[num]);
+
   return 0;
 
 }
