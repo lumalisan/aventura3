@@ -4,7 +4,7 @@
 #include "my_lib.h"
 
 #define THREADS 10
-#define N 1000000
+#define N 100000
 
 void *funcion_hilo();
 
@@ -89,6 +89,7 @@ int main(int argc, char *argv[]) {
         my_stack_write(stack,argv[1]);
     }
 
+/*
     for (int i=0; i<10; i++) {
         struct my_stack *debug_stack = my_stack_read(argv[1]);
         struct my_data *debug_data = malloc(sizeof(struct my_data));
@@ -96,20 +97,26 @@ int main(int argc, char *argv[]) {
         int debug_value = debug_data->value;
         printf("DEBUG Elemento pila n.%d: %d\n",i,debug_value);
     }
+*/
 
   printf("Threads: %d. Iterations: %d\n", THREADS, N);
     while (num != THREADS) {
       pthread_create(&hilos[num], NULL, funcion_hilo, NULL);
       num++;
     }
-    //printf("Creados 10 threads, en teoría\n");
 
     for (int i=0; i<THREADS; i++) {
         pthread_join(hilos[i],NULL);
     }
 
     my_stack_write(stack,argv[1]);
-    
+
+    my_stack_purge(stack);
+
+    for (int i=0; i<THREADS; i++) {
+        pthread_exit(&hilos[i]);
+    }
+
 
     return 0;
 
@@ -130,14 +137,13 @@ void *funcion_hilo() {
     pthread_mutex_unlock(&mutex);
     int value = data_int->value;
     value++;
-    //printf("DEBUG Value: %d\n",value);
     data_int->value = value;
     pthread_mutex_lock(&mutex);
     my_stack_push(stack, data_int);
     pthread_mutex_unlock(&mutex);
   }
 
-  pthread_exit(&hilos[num]);
+  //pthread_exit(&hilos[num]);
 
   return 0;
 
