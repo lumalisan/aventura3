@@ -4,13 +4,11 @@
 #include "my_lib.h"
 
 #define THREADS 10
-#define N 100000
+#define N 10000
 
 void *funcion_hilo();
 
 static struct my_stack *stack;
-//static struct my_stack_node *data;
-static int num = 0;
 
 pthread_t hilos[THREADS];
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
@@ -30,8 +28,8 @@ struct my_data {
 
 int main(int argc, char *argv[]) {
 
-  if (strlen(argv[1]) == 0) {
-    printf("USAGE: ./av3 <filename>\n");
+  if (argv[1] == NULL || strlen(argv[1]) == 0) {
+    fprintf(stderr, "USAGE: ./av3 <filename>\n", NULL);
     exit(1);
   }
 
@@ -39,6 +37,8 @@ int main(int argc, char *argv[]) {
 
   int num_elems = 10;
   int debug_num_elems = 10;
+  int status;
+  pthread_attr_t attr;
 
 /*
   Mayor nùmero para verificar si se añaden los elementos que faltan.
@@ -99,30 +99,30 @@ int main(int argc, char *argv[]) {
     }
 */
 
+  pthread_attr_init(&attr);
+  pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
+
   printf("Threads: %d. Iterations: %d\n", THREADS, N);
-    while (num != THREADS) {
-      pthread_create(&hilos[num], NULL, funcion_hilo, NULL);
-      num++;
-    }
+  for(int i = 0; i < THREADS; i++) {
+     pthread_create(&hilos[i], &attr, funcion_hilo, NULL);
+  }
 
-    for (int i=0; i<THREADS; i++) {
-        pthread_join(hilos[i],NULL);
-    }
+  pthread_attr_destroy(&attr);
 
-    my_stack_write(stack,argv[1]);
+  /* Wait on the other threads */
+  for(int i = 0; i < THREADS; i++) {
+    pthread_join(hilos[i], (void **)&status);
+  }
 
-    for (int i=0; i<THREADS; i++) {
-        pthread_exit(&hilos[i]);
-    }
+  my_stack_write(stack,argv[1]);
+  //my_stack_purge(stack);
 
-    my_stack_purge(stack);
-
-    return 0;
+  pthread_mutex_destroy(&mutex);
+  pthread_exit(NULL);
 
 }
 
 void *funcion_hilo() {
-  // My boobs are veganas, fiol is fucking bitch lasagna bitch lasagna
 
   printf("Starting thread\n");
 
@@ -142,8 +142,6 @@ void *funcion_hilo() {
     pthread_mutex_unlock(&mutex);
   }
 
-  //pthread_exit(&hilos[num]);
-
-  return 0;
+  pthread_exit((void*) 0);
 
 }
