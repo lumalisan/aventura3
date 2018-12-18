@@ -1,3 +1,8 @@
+// Assembly Language Lovers - Aventura 3
+// Castorina, Izar Maria Pietro
+// Lòpez Cortés, Andreu
+// Rocha, Lisandro
+
 #include <stdio.h>
 #include <string.h>
 #include <pthread.h>
