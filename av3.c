@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
         if (my_stack_len(stack) < num_elems) {    // Comprobamos si hay menos elementos de lo esperado
 
             int diff = num_elems - my_stack_len(stack);
-            for (int i=0; i<diff; i++) {          // Si hay menos, se añade la diferencia 
+            for (int i=0; i<diff; i++) {          // Si hay menos, se añade la diferencia
                 data_int = malloc(sizeof(int));
                 *data_int = 0;
                 my_stack_push(stack,data_int);
@@ -88,7 +88,7 @@ int main(int argc, char *argv[]) {
 
 }
 
-// Funciòn a ejecutar por los hilos
+// Función a ejecutar por los hilos
 void *funcion_hilo() {
 
   printf("Starting thread\n");
