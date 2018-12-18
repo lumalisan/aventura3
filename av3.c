@@ -4,7 +4,7 @@
 #include "my_lib.h"
 
 #define THREADS 10
-#define N 10000
+#define N 1000
 
 void *funcion_hilo();
 
@@ -22,10 +22,6 @@ pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 */
 
-struct my_data {
-  int value;
-};
-
 int main(int argc, char *argv[]) {
 
   if (argv[1] == NULL || strlen(argv[1]) == 0) {
@@ -38,7 +34,6 @@ int main(int argc, char *argv[]) {
   int num_elems = 10;
   int debug_num_elems = 10;
   int status;
-  pthread_attr_t attr;
 
 /*
   Mayor nùmero para verificar si se añaden los elementos que faltan.
@@ -47,9 +42,6 @@ int main(int argc, char *argv[]) {
   si efectivamente se añadìan los elementos que faltaban
 */
 
-  struct my_data *data_int;
-  data_int = malloc(sizeof(struct my_data));
-  data_int->value = 0;
   //data = malloc(sizeof(struct my_data));    // Reservamos memòria para un nodo
   //data->data = 0;                               // Valor del nodo: 0
 
@@ -89,29 +81,16 @@ int main(int argc, char *argv[]) {
         my_stack_write(stack,argv[1]);
     }
 
-/*
-    for (int i=0; i<10; i++) {
-        struct my_stack *debug_stack = my_stack_read(argv[1]);
-        struct my_data *debug_data = malloc(sizeof(struct my_data));
-        debug_data = my_stack_pop(debug_stack);
-        int debug_value = debug_data->value;
-        printf("DEBUG Elemento pila n.%d: %d\n",i,debug_value);
-    }
-*/
-
-  pthread_attr_init(&attr);
-  pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_JOINABLE);
-
   printf("Threads: %d. Iterations: %d\n", THREADS, N);
   for(int i = 0; i < THREADS; i++) {
-     pthread_create(&hilos[i], &attr, funcion_hilo, NULL);
+     pthread_create(&hilos[i], NULL, funcion_hilo, NULL);
   }
 
   pthread_attr_destroy(&attr);
 
   /* Wait on the other threads */
   for(int i = 0; i < THREADS; i++) {
-    pthread_join(hilos[i], (void **)&status);
+    pthread_join(hilos[i], NULL);
   }
 
   my_stack_write(stack,argv[1]);
@@ -125,23 +104,20 @@ int main(int argc, char *argv[]) {
 void *funcion_hilo() {
 
   printf("Starting thread\n");
+  int *data_int;
 
-  int counter = 0;
-  while (counter != N) {
-    counter++;
-    struct my_data *data_int;
-    data_int = malloc(sizeof(struct my_data));
+  for (size_t i = 0; i < N; i++) {
     pthread_mutex_lock(&mutex);
     data_int = my_stack_pop(stack);
     pthread_mutex_unlock(&mutex);
-    int value = data_int->value;
-    value++;
-    data_int->value = value;
+
+    (*data_int)++;
+
     pthread_mutex_lock(&mutex);
     my_stack_push(stack, data_int);
     pthread_mutex_unlock(&mutex);
   }
 
-  pthread_exit((void*) 0);
+  pthread_exit(NULL);
 
 }
