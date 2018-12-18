@@ -18,15 +18,6 @@ static struct my_stack *stack;
 pthread_t hilos[THREADS];
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
-/* Funciones asociadas a la libreria pthread
-
-    pthread_mutex_lock()    --> Bloqueamos el semáforo mutex pasandole como parámetro su dirección
-    pthread_mutex_unlock()  --> Desbloqueamos el semáforo mutex pasandole como parámetro su dirección
-    pthread_exit()          --> Salimos de la función
-    pthread_join()          --> Espera a que los hilos acabaen
-
-*/
-
 int main(int argc, char *argv[]) {
 
   // Si el usuario no especifica un nombre de fichero, el programa devuelve la sintaxis correcta y se cierra
@@ -53,7 +44,7 @@ int main(int argc, char *argv[]) {
         if (my_stack_len(stack) < num_elems) {    // Comprobamos si hay menos elementos de lo esperado
 
             int diff = num_elems - my_stack_len(stack);
-            for (int i=0; i<diff; i++) {          // Si hay menos, se añade la diferencia 
+            for (int i=0; i<diff; i++) {          // Si hay menos, se añade la diferencia
                 data_int = malloc(sizeof(int));
                 *data_int = 0;
                 my_stack_push(stack,data_int);
@@ -97,7 +88,7 @@ int main(int argc, char *argv[]) {
 
 }
 
-// Funciòn a ejecutar por los hilos
+// Función a ejecutar por los hilos
 void *funcion_hilo() {
 
   printf("Starting thread\n");
