@@ -9,15 +9,17 @@ struct my_data {
 
 int main(int argc, char *argv[]) {
 
-	if (strlen(argv[1]) == 0) {
-		printf("USAGE: ./reader <filename>\n");
+	if (argv[1] == NULL || strlen(argv[1]) == 0) {
+    fprintf(stderr, "USAGE: ./reader <filename>\n", NULL);
 		exit(1);
 	}
 
 	struct my_stack *stack = my_stack_read(argv[1]);
 
 	if (stack == NULL) {
-		printf("Couldn't open stack file %s\n", argv[1]);
+    char str[100];
+    sprintf(str, "Couldn't open stack file %s\n", argv[1]);
+    fprintf(stderr, str, NULL);
 		exit(1);
 	}
 
