@@ -4,7 +4,7 @@
 #include "my_lib.h"
 
 #define THREADS 10
-#define N 1000
+#define N 1000000
 
 void *funcion_hilo();
 
@@ -32,8 +32,8 @@ int main(int argc, char *argv[]) {
   stack = my_stack_read(argv[1]);
 
   int num_elems = 10;
-  int debug_num_elems = 10;
-  int status;
+  //int debug_num_elems = 10;
+  int *data_int;
 
 /*
   Mayor nùmero para verificar si se añaden los elementos que faltan.
@@ -42,12 +42,10 @@ int main(int argc, char *argv[]) {
   si efectivamente se añadìan los elementos que faltaban
 */
 
-  //data = malloc(sizeof(struct my_data));    // Reservamos memòria para un nodo
-  //data->data = 0;                               // Valor del nodo: 0
-
     if (stack != NULL) {    // Si el fichero existe, leemos la pila
         printf("Fichero %s encontrado!)\n",argv[1]);
 
+        /*
          // Si la pila leida contiene menos de num_elems elementos, añadimos los restantes
         if (my_stack_len(stack) < debug_num_elems) {
             printf("DEBUG - Hay menos de %d elementos en la pila! (stack length: %d)\n",debug_num_elems,my_stack_len(stack));
@@ -69,12 +67,15 @@ int main(int argc, char *argv[]) {
             my_stack_write(aux_stack,argv[1]);    // Substituimos la pila auxiliaria a la pila original
             stack = my_stack_read(argv[1]);       // Leemos la pila auxiliaria
         }
+        */
 
     } else {                                  // Si el fichero no existe, llenamos la pila de (num_elems) elementos y la escribimos
         printf("Fichero \"%s\" no encontrado! Creando...\n", argv[1]);
         stack = my_stack_init(num_elems);
 
-        for (int i=0; i<num_elems; i++) {
+        for (int i = 0; i < num_elems; i++) {
+            data_int = malloc(sizeof(int));
+            *data_int = 0;
             my_stack_push(stack,data_int);
         }
 
@@ -85,8 +86,6 @@ int main(int argc, char *argv[]) {
   for(int i = 0; i < THREADS; i++) {
      pthread_create(&hilos[i], NULL, funcion_hilo, NULL);
   }
-
-  pthread_attr_destroy(&attr);
 
   /* Wait on the other threads */
   for(int i = 0; i < THREADS; i++) {
