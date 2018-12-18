@@ -33,7 +33,6 @@ int main(int argc, char *argv[]) {
 
 	while (contador < stack_length) {
 		contador++;
-
 		data_int = my_stack_pop(stack);
 		printf("Elemento número %d --> %d\n", contador, data_int->value);
 		//Suma
@@ -48,7 +47,10 @@ int main(int argc, char *argv[]) {
 		} else if (data_int->value > max) {
 			max = data_int->value;
 		}
+		
 	}
+
+	free(data_int);
 
 	//Media
 	int media = suma/contador;
