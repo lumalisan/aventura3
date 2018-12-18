@@ -45,29 +45,16 @@ int main(int argc, char *argv[]) {
     if (stack != NULL) {    // Si el fichero existe, leemos la pila
         printf("Fichero %s encontrado!)\n",argv[1]);
 
-        /*
-         // Si la pila leida contiene menos de num_elems elementos, añadimos los restantes
-        if (my_stack_len(stack) < debug_num_elems) {
-            printf("DEBUG - Hay menos de %d elementos en la pila! (stack length: %d)\n",debug_num_elems,my_stack_len(stack));
+        if (my_stack_len(stack) < num_elems) {
 
-            struct my_stack *aux_stack = my_stack_init(debug_num_elems);    // Creaciòn de una pila auxiliaria
-            int num_elems_read = my_stack_len(stack);                       // Nùmero de elementos en la pila leida
-
-            for (int i=0; i<num_elems_read; i++) {
-                printf("DEBUG - Copying data... (Remaining: %d)\n",my_stack_len(stack));
-                struct my_stack_node *aux_data = my_stack_pop(stack);
-                my_stack_push(aux_stack, aux_data);                 // Copiamos los contenidos de la pila en la auxiliaria
+            int diff = num_elems - my_stack_len(stack);
+            for (int i=0; i<diff; i++) {
+                data_int = malloc(sizeof(int));
+                *data_int = 0;
+                my_stack_push(stack,data_int);
             }
-
-            while (my_stack_len(aux_stack) != debug_num_elems) {    // Añadimos los elementos que faltan
-                my_stack_push(aux_stack,data_int);
-                printf("DEBUG - Adding 1 element... | ");
-                printf("Current stack length: %d\n",my_stack_len(aux_stack));
-            }
-            my_stack_write(aux_stack,argv[1]);    // Substituimos la pila auxiliaria a la pila original
-            stack = my_stack_read(argv[1]);       // Leemos la pila auxiliaria
+            my_stack_write(stack,argv[1]);
         }
-        */
 
     } else {                                  // Si el fichero no existe, llenamos la pila de (num_elems) elementos y la escribimos
         printf("Fichero \"%s\" no encontrado! Creando...\n", argv[1]);
