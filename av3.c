@@ -9,7 +9,7 @@
 #include "my_lib.h"
 
 #define THREADS 10
-#define N 1000000
+#define N 1000000     // Nùmero de iteraciones
 
 void *funcion_hilo();
 
@@ -17,15 +17,6 @@ static struct my_stack *stack;
 
 pthread_t hilos[THREADS];
 pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
-
-/* Funciones asociadas a la libreria pthread
-
-    pthread_mutex_lock()    --> Bloqueamos el semáforo mutex pasandole como parámetro su dirección
-    pthread_mutex_unlock()  --> Desbloqueamos el semáforo mutex pasandole como parámetro su dirección
-    pthread_exit()          --> Salimos de la función
-    pthread_join()          --> Espera a que los hilos acabaen
-
-*/
 
 int main(int argc, char *argv[]) {
 
