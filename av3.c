@@ -60,7 +60,6 @@ int main(int argc, char *argv[]) {
             data_int = malloc(sizeof(int));
             *data_int = 0;
             my_stack_push(stack,data_int);
-            free(data_int);
         }
 
         my_stack_write(stack,argv[1]);
