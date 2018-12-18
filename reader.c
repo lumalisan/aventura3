@@ -10,7 +10,7 @@ struct my_data {
 int main(int argc, char *argv[]) {
 
 	if (argv[1] == NULL || strlen(argv[1]) == 0) {
-    fprintf(stderr, "USAGE: ./reader <filename>\n", NULL);
+    fprintf(stderr, "USAGE: ./reader <filename>\n");
 		exit(1);
 	}
 
