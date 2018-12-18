@@ -9,7 +9,7 @@
 #include "my_lib.h"
 
 #define THREADS 10
-#define N 100000     // Nùmero de iteraciones
+#define N 1000000     // Nùmero de iteraciones
 
 void *funcion_hilo();
 
