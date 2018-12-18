@@ -69,6 +69,7 @@ int main(int argc, char *argv[]) {
             data_int = malloc(sizeof(int));
             *data_int = 0;
             my_stack_push(stack,data_int);
+            free(data_int);
         }
 
         my_stack_write(stack,argv[1]);
@@ -89,7 +90,7 @@ int main(int argc, char *argv[]) {
 
   // Escribimos la pila
   my_stack_write(stack,argv[1]);
-  //my_stack_purge(stack);
+  my_stack_purge(stack);
 
   pthread_mutex_destroy(&mutex);
   pthread_exit(NULL);
