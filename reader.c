@@ -33,6 +33,7 @@ int main(int argc, char *argv[]) {
 
 	int stack_length = my_stack_len(stack);
 
+  printf("Stack length: %d\n", stack_length);
 	while (contador < stack_length) {
 		contador++;
 		data_int = my_stack_pop(stack);
@@ -49,7 +50,7 @@ int main(int argc, char *argv[]) {
 		} else if (data_int->value > max) {
 			max = data_int->value;
 		}
-		
+
 	}
 
 	free(data_int);
