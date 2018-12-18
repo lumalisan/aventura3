@@ -9,7 +9,7 @@
 #include "my_lib.h"
 
 #define THREADS 10
-#define N 1000000     // Nùmero de iteraciones
+#define N 100000     // Nùmero de iteraciones
 
 void *funcion_hilo();
 
@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
 
   // Escribimos la pila
   my_stack_write(stack,argv[1]);
-  my_stack_purge(stack);
+  //my_stack_purge(stack);
 
   pthread_mutex_destroy(&mutex);
   pthread_exit(NULL);
@@ -98,9 +98,7 @@ void *funcion_hilo() {
     pthread_mutex_lock(&mutex);
     data_int = my_stack_pop(stack);   // Pop desde la pila, secciòn critica #1
     pthread_mutex_unlock(&mutex);
-
     (*data_int)++;
-
     pthread_mutex_lock(&mutex);
     my_stack_push(stack, data_int);   // Push hacia la pila, secciòn critica #2
     pthread_mutex_unlock(&mutex);
